@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,121 +60,101 @@ namespace ZAD_1
                 //Korisnički unos imena
                 Console.Write("Unesite ime novog studenta (0 za odustajanje): ");
                 string ime = Console.ReadLine();
-                var inputResult = InputManager.CheckType(ime.Trim());
+                string result = InputManager.CheckType(ime);
 
-                // NIJE DOBRO
-                while (inputResult == "null")
+                while (result == "Int" || result == "Null")
                 {
-                    Console.WriteLine("\nUnos imena novog studenta je obavezan");
-                    Console.Write("Unesite ime novog studenta (0 za odustajanje): ");
+                    Console.Write("Unos imena novog studenta nije u odgovarajućem formatu, pokušajte ponovno (0 za odustajanje): ");
                     ime = Console.ReadLine();
+                    result = InputManager.CheckType(ime);
                 }
 
-                while (inputResult == "0")
+                if (ime == "0")
                 {
-                    Console.WriteLine("\nOdustajanje...\n\n");
+                    Console.WriteLine("\n\nOdustajanje...\n\n");
                     Start();
-                }               
-                while (inputResult == "string")
-                {
-                    student.Ime = ime;
                 }
 
-                while (inputResult == "int")
-                {
-                    Console.WriteLine("\nUnesite pravilno ime novog studenta: \n");
-                    ime = Console.ReadLine();
-                    inputResult = InputManager.CheckType(ime.Trim());
-                }
+                student.Ime = ime;
+
 
                 //Korisnički unos prezimena
                 Console.Write("Unesite prezime novog studenta (0 za odustajanje): ");
                 string prezime = Console.ReadLine();
-                inputResult = InputManager.CheckType(prezime.Trim());
+                result = InputManager.CheckType(prezime);
 
-                if (inputResult == "null")
+                while (result == "Int" || result == "Null")
                 {
-                    Console.WriteLine("\nUnos prezimena novog studenta je obavezno");
-                    Start();
-                }
-                else if (inputResult == "0")
-                {
-                    Console.WriteLine("\nOdustajanje...\n\n");
-                    Start();
-                }               
-                else if (inputResult == "string")
-                {
-                    student.Prezime = prezime.Trim();
-
-                }
-                while (inputResult == "int")
-                {
-                    Console.WriteLine("\nUnesite pravilno prezime novog studenta: \n");
+                    Console.Write("Unos prezimena novog studenta nije u odgovarajućem formatu, pokušajte ponovno (0 za odustajanje): ");
                     prezime = Console.ReadLine();
-                    inputResult = InputManager.CheckType(prezime.Trim());
+                    result = InputManager.CheckType(prezime);
                 }
+
+                if (prezime == "0")
+                {
+                    Console.WriteLine("\n\nOdustajanje...\n\n");
+                    Start();
+                }
+
+                student.Prezime = prezime;
+
+
+                //Korisnički unos godine studija
+                Console.Write("Unesite godinu studija novog studenta (0 za odustajanje): ");
+                string godina = Console.ReadLine();
+                result = InputManager.CheckType(godina);
+
+                while (result == "String" || result == "Null")
+                {
+                    Console.Write("Unos godine studija novog studenta nije u odgovarajućem formatu, pokušajte ponovno (0 za odustajanje): ");
+                    godina = Console.ReadLine();
+                    result = InputManager.CheckType(godina);
+                }
+
+                if (godina == "0")
+                {
+                    Console.WriteLine("\n\nOdustajanje...\n\n");
+                    Start();
+                }
+
+                student.GodinaStudija = Convert.ToInt32(godina);
+
 
                 //Korisnički unos broja indeksa
-                Console.Write("Unesi broj indeksa novog studenta (0 za odustajanje): ");
-                string brojIndeksa = Console.ReadLine();
-                inputResult = InputManager.CheckType(brojIndeksa.Trim());
+                Console.Write("Unesite broj indeksa novog studenta (0 za odustajanje): ");
+                string broj = Console.ReadLine();
+                result = InputManager.CheckType(broj);
 
-                if (inputResult == "null")
+                while (result == "String" || result == "Null")
                 {
-                    Console.WriteLine("\nUnos broja indeksa novog studenta je obavezno");
-                    Console.Write("Unesi broj indeksa novog studenta (0 za odustajanje): ");
-                    brojIndeksa = Console.ReadLine();
-                    inputResult = InputManager.CheckType(brojIndeksa.Trim());
+                    Console.Write("Unos broja indeksa novog studenta nije u odgovarajućem formatu, pokušajte ponovno (0 za odustajanje): ");
+                    broj = Console.ReadLine();
+                    result = InputManager.CheckType(broj);
                 }
-                else if (inputResult == "0")
-                {
-                    Console.WriteLine("\nOdustajanje...\n\n");
-                    Start();
-                }               
-                else if (inputResult == "string" || inputResult == "int")
-                {
-                    student.BrojIndeksa = brojIndeksa;
-                }               
 
-                //Korisnicki unos godine studija
-                Console.Write("Unesi godinu studija novog studenta (0 za odustajanje): ");
-                string godinaStudija = Console.ReadLine();
-                inputResult = InputManager.CheckType(godinaStudija);
-
-                if (inputResult == "null")
+                if (broj == "0")
                 {
-                    Console.WriteLine("\nUnos godine studija novog studenta je obavezno");
+                    Console.WriteLine("\n\nOdustajanje...\n\n");
                     Start();
                 }
-                else if (inputResult == "0")
-                {
-                    Console.WriteLine("\nOdustajanje...\n\n");
-                    Start();
-                }                              
-                else if (inputResult == "int")
-                {
-                    student.GodinaStudija = Convert.ToInt32(godinaStudija);
-                }
-                while (inputResult == "string")
-                {
-                    Console.WriteLine("\nUnesite pravilno godinu studija novog studenta: \n");
-                    godinaStudija = Console.ReadLine();
-                    inputResult = InputManager.CheckType(godinaStudija);
-                }   
 
-                //Metoda u repo za kreiranje novog studenta koja prima lokalnu varijablu student
-                var result = Repository.CreateNewStudent(student);
-                if (result)
+                student.BrojIndeksa = broj;
+
+
+                //Metoda u repo za kreiranje novog studenta
+                bool provjera = Repository.CreateNewStudent(student);
+                if (provjera)
                 {
                     //Ispis uspješnosti
                     Console.WriteLine("\n\nStudent uspješno dodan sa podacima: " + student.ToString());
                     Console.WriteLine("\n\n");
+                    Console.ReadLine();
                 }
                 else
                 {
-                    Console.WriteLine("\nU bazi već postoji student sa istim brojem indeksa\n");
+                    Console.WriteLine("\nU bazi već postoji student sa unesenim brojem indeksa\n");
+                    Console.ReadLine();
                 }
-
             }
             catch (Exception e)
             {
@@ -181,8 +162,6 @@ namespace ZAD_1
                 throw;
             }
 
-
-            //Pokretanje metode za ispis podataka o unesenom studentu
             Start();
         }
 
@@ -191,9 +170,7 @@ namespace ZAD_1
             Console.WriteLine("\n");
 
             //Ispis svih studanata u bazi
-            var studenti = Repository.GetStudenti();
-            //Console.WriteLine("\n" + studenti +"\n");
-            //Console.WriteLine(Repository.PrikaziStudente());
+            Repository.GetStudenti();
 
             // Korisnički unos kojeg studenta se želi urediti
             Console.Write("\n\nUpišite broj indeksa studenta kojeg želite urediti (0 za odustajanje): ");
@@ -208,7 +185,7 @@ namespace ZAD_1
             }
 
             // Provjera da li je unesen broj indeksa
-            if (string.IsNullOrWhiteSpace(brojIndeksa))
+            while (string.IsNullOrWhiteSpace(brojIndeksa))
             {
                 Console.WriteLine("\nNeispravan unos, pokušajte ponovno\n");
                 //Vraćamo korisnika na ponovni unos za uredivanje studenta 
@@ -228,44 +205,75 @@ namespace ZAD_1
 
             //Student u bazi je pronađen, unosimo nove podatke o studentu koje zelimo mijenjati
             Console.WriteLine("\nUnesite novo ime studenta: ");
-            var ime = Console.ReadLine();
-            while (string.IsNullOrWhiteSpace(ime))
+            string ime = Console.ReadLine();
+            string result = InputManager.CheckType(ime);
+
+            while (result == "Int" || result == "Null")
             {
-                Console.WriteLine("\nNeispravan unos, pokušajte ponovno\n");
-                Console.WriteLine("\nUnesite novo ime studenta: ");
+                Console.Write("Unos imena novog studenta nije u odgovarajućem formatu, pokušajte ponovno (0 za odustajanje): ");
                 ime = Console.ReadLine();
+                result = InputManager.CheckType(ime);
             }
+
+            if (ime == "0")
+            {
+                Console.WriteLine("\n\nOdustajanje...\n\n");
+                Start();
+            }
+
             student.Ime = ime;
 
             Console.WriteLine("Unesite prezime: ");
-            var prezime = Console.ReadLine();
+            string prezime = Console.ReadLine();
+            result = InputManager.CheckType(prezime);
 
-            while (string.IsNullOrWhiteSpace(prezime))
+            while (result == "Int" || result == "Null")
             {
-                Console.WriteLine("\nNeispravan unos, pokušajte ponovno\n");
-                Console.WriteLine("\nUnesite novo prezime studenta: ");
+                Console.Write("Unos prezimena novog studenta nije u odgovarajućem formatu, pokušajte ponovno (0 za odustajanje): ");
                 prezime = Console.ReadLine();
+                result = InputManager.CheckType(prezime);
             }
+
+            if (prezime == "0")
+            {
+                Console.WriteLine("\n\nOdustajanje...\n\n");
+                Start();
+            }
+
             student.Prezime = prezime;
 
+
             Console.WriteLine("Unesite godinu studija: ");
-            var godinaStudija = Convert.ToInt32(Console.ReadLine());
+            string godina = Console.ReadLine();
+            result = InputManager.CheckType(godina);
 
-            while (godinaStudija == null)
-                student.GodinaStudija = godinaStudija;
+            while (result == "String" || result == "Null")
+            {
+                Console.Write("Unos godine studija novog studenta nije u odgovarajućem formatu, pokušajte ponovno (0 za odustajanje): ");
+                godina = Console.ReadLine();
+                result = InputManager.CheckType(godina);
+            }
 
+            if (godina == "0")
+            {
+                Console.WriteLine("\n\nOdustajanje...\n\n");
+                Start();
+            }
+
+            student.GodinaStudija = Convert.ToInt32(godina);
 
             //krecemo u azuriranje nasih pohranjenih podataka
-            Repository.UrediStudenta(student);
-
-            //Poruka o uspješnosti
-            Console.WriteLine("\nPodaci studenta uspješno uređeni, podaci o studentu sa brojem indeksa " + student.BrojIndeksa + ", su " + student.ToString());
-
-            Console.WriteLine("\nNova lista studenata: ");
-            //Console.WriteLine(Repository.PrikaziStudente());
-
-            //povratak na glavni izbornik
-            Start();
+            bool isValid = Repository.UrediStudenta(student);
+            if (isValid)
+            {
+                //Poruka o uspješnosti
+                Console.WriteLine("\nPodaci studenta uspješno uređeni, podaci o studentu sa brojem indeksa " + student.BrojIndeksa + ", su " + student.ToString());
+            }
+            else
+            {
+                Console.WriteLine("Uređivanje studenta neuspješno, povratak na izbornik...");
+                Start();
+            }           
         }
 
         public static void IzbrisiStudenta()
@@ -274,7 +282,7 @@ namespace ZAD_1
 
             //Prikaz svih studenata
             var studenti = Repository.GetStudenti();
-            Console.WriteLine("\n" + studenti +"\n");
+            Console.WriteLine("\n" + studenti + "\n");
             //Korisnicki unos
             Console.Write("\n\nUpišite broj indeksa studenta kojeg želite izbrisati: ");
 
@@ -322,7 +330,6 @@ namespace ZAD_1
         {
             Console.WriteLine("\n");
 
-            
 
             if (Repository.ClearStudentsList())
             {
@@ -334,8 +341,6 @@ namespace ZAD_1
             }
 
             Start();
-
         }
-
     }
 }

@@ -25,7 +25,6 @@ namespace ZAD_1
             //pri cemu je key dictionarija, unique identifier odredjenog objekta..
             //npr: Dictionary<string, Student> studentDict; gdje je string sifraIndeksa
 
-
         }
 
        

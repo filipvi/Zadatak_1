@@ -8,22 +8,65 @@ namespace ZAD_1.Helper
 {
     class InputManager
     {
+        public static bool ParseToInt(string input)
+        {
+            if (int.TryParse(input, out var result))
+            {
+                return true;
+            }
+            return false;
+        }
+
         public static string CheckType(string input)
         {
+            int n;
             if (!string.IsNullOrWhiteSpace(input))
             {
-                if (input == "0")
+                bool inputResult = IsQuit(input);
+                if (inputResult)
                 {
-                    return "0";
+                    return "Quit";                    
                 }
 
-                if (int.TryParse(input, out var result))
-                {               
-                    return  "int";
+                inputResult = IsValidInt(input);
+                if (inputResult)
+                {
+                    return "Int";
+                }
+
+                inputResult = IsValidString(input);
+                if (inputResult)
+                {
+                    return "String";
                 }
             }
-            
-            return "null";
+
+            return "Null";
+
         }
+
+    public static bool IsQuit(string input)
+    {
+        if (input == "0")
+        {
+            return true;
+        }
+        return false;
     }
+
+    public static bool IsValidString(string input)
+    {
+        return true;
+    }
+
+    public static bool IsValidInt(string input)
+    {
+        if (int.TryParse(input, out var result))
+        {
+            return true;
+        }
+
+        return false;
+    }
+}
 }

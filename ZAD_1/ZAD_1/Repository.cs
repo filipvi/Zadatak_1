@@ -18,16 +18,18 @@ namespace ZAD_1
         {
             studenti = new Dictionary<string, Student>()
             {
-                { "123456", new Student {Ime= "Filip", Prezime= "Karnik", BrojIndeksa = "2334235", GodinaStudija = 2}},
-                { "678901", new Student {Ime= "Marko", Prezime= "Marković", BrojIndeksa = "6934235", GodinaStudija = 4}},
-                { "786423", new Student {Ime= "Jure", Prezime= "Jurić", BrojIndeksa = "7214235", GodinaStudija = 1}},
+                { "123456", new Student {Ime= "Filip", Prezime= "Karnik", BrojIndeksa = "123456", GodinaStudija = 2}},
+                { "678901", new Student {Ime= "Marko", Prezime= "Marković", BrojIndeksa = "678901", GodinaStudija = 4}},
+                { "786423", new Student {Ime= "Jure", Prezime= "Jurić", BrojIndeksa = "786423", GodinaStudija = 1}},
             };
+
             nastavnici = new Dictionary<int, Nastavnik>()
             {
                 {34678, new Nastavnik{Ime = "Pero", Prezime = "Perić", Godine = 34}},
                 {663478, new Nastavnik{Ime = "Matija", Prezime = "Lukeško", Godine = 45}},
                 {5465678, new Nastavnik{Ime = "Ivan", Prezime = "Ivanić", Godine = 41}},
             };
+
             kolegiji = new Dictionary<int, Kolegij>()
             {
                 {34689, new Kolegij{Naziv = "Matematika", Skracenica = "MAT"}},
@@ -39,33 +41,42 @@ namespace ZAD_1
 
         #region Studenti
 
-        public static Dictionary<string, Student> PrikaziListuStudenata()
+        public static Dictionary<string, Student> GetStudenti()
         {
-            foreach (var student in studenti)
+            foreach (var student in studenti.Values)
             {
                 Console.WriteLine(student.ToString());
             }
 
             return null;
-        }
+        }        
 
         public static Student GetStudent(string brojIndeksa)
         {
             //pokrenuta metoda trazenja, pripremljen container za eventualno nadjenog studenta
-            Student matchStudent = null;
+            Student matchStudent = new Student();
+            matchStudent.BrojIndeksa = brojIndeksa;
 
             //kroz kolekciju studenata trazimo
             foreach (var student in studenti)
             {
-                if (student.Key[Convert.ToInt32(brojIndeksa)].Equals(matchStudent.BrojIndeksa))
-                {
-                    //matchStudent = student; //pridruzujemo nadjenog studenta u kontejner
-                    //break;
-                }
+                //Definiramo keyeve i value vrijednosti za studenta
+                var studentKey = student.Key;
+                var studentValue = student.Value;
 
+                if (studentKey == matchStudent.BrojIndeksa)
+                {
+                    matchStudent.BrojIndeksa = studentKey;
+                    matchStudent.Ime = studentValue.Ime;
+                    matchStudent.Prezime = studentValue.Prezime;
+                    matchStudent.GodinaStudija = studentValue.GodinaStudija;
+
+                    return matchStudent;
+                    break;
+                }
             }
             //Metoda ima posao pretrazivanja i vraćanja objekta Student, ukoliko ga je pronasla vraća studenta
-            return matchStudent;
+            return null;
         }
 
         public static bool CreateNewStudent(Student student)
@@ -79,21 +90,30 @@ namespace ZAD_1
             return false;
         }
 
-        public static void UrediStudenta(Student student)
+        public static bool UrediStudenta(Student student)
         {
-            //foreach (var stud in studenti)
-            //{
-            //    {
-            //        if (stud.BrojIndeksa.Equals(student.BrojIndeksa))
-            //        {
-            //            stud.GodinaStudija = student.GodinaStudija;
-            //            stud.Ime = student.Ime;
-            //            stud.Prezime = student.Prezime;
-            //            break;
-            //        }
+            //pokrenuta metoda trazenja, pripremljen container za eventualno nadjenog studenta
+            Student matchStudent = new Student();
+            matchStudent.BrojIndeksa = student.BrojIndeksa;
 
-            //    }
-            //}
+            //kroz kolekciju studenata trazimo
+            foreach (var stud in studenti)
+            {
+                //Definiramo keyeve i value vrijednosti za studenta
+                var studentKey = stud.Key;
+
+                if (studentKey == matchStudent.BrojIndeksa)
+                {
+                    matchStudent.BrojIndeksa = student.BrojIndeksa;
+                    matchStudent.Ime = student.Ime;
+                    matchStudent.Prezime = student.Prezime;
+                    matchStudent.GodinaStudija = student.GodinaStudija;
+
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static bool RemoveStudent(Student student)
@@ -221,15 +241,6 @@ namespace ZAD_1
         #endregion
 
 
-        public static Dictionary<string, Student> GetStudenti()
-        {
-
-            foreach (var student in studenti.Values)
-            {
-                Console.WriteLine(student.ToString());                
-            }
-
-            return studenti;
-        }
+       
     }
 }
