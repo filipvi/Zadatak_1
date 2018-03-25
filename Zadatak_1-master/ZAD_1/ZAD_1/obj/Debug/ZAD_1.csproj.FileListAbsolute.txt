@@ -1,0 +1,14 @@
+C:\Users\Filip\Desktop\ZAD_1\ZAD_1\bin\Debug\ZAD_1.exe.config
+C:\Users\Filip\Desktop\ZAD_1\ZAD_1\bin\Debug\ZAD_1.exe
+C:\Users\Filip\Desktop\ZAD_1\ZAD_1\bin\Debug\ZAD_1.pdb
+C:\Users\Filip\Desktop\ZAD_1\ZAD_1\obj\Debug\ZAD_1.csprojResolveAssemblyReference.cache
+C:\Users\Filip\Desktop\ZAD_1\ZAD_1\obj\Debug\ZAD_1.csproj.CoreCompileInputs.cache
+C:\Users\Filip\Desktop\ZAD_1\ZAD_1\obj\Debug\ZAD_1.exe
+C:\Users\Filip\Desktop\ZAD_1\ZAD_1\obj\Debug\ZAD_1.pdb
+C:\Users\filip\Desktop\Zadatak_1-master\ZAD_1\ZAD_1\bin\Debug\ZAD_1.exe.config
+C:\Users\filip\Desktop\Zadatak_1-master\ZAD_1\ZAD_1\bin\Debug\ZAD_1.exe
+C:\Users\filip\Desktop\Zadatak_1-master\ZAD_1\ZAD_1\bin\Debug\ZAD_1.pdb
+C:\Users\filip\Desktop\Zadatak_1-master\ZAD_1\ZAD_1\obj\Debug\ZAD_1.csprojResolveAssemblyReference.cache
+C:\Users\filip\Desktop\Zadatak_1-master\ZAD_1\ZAD_1\obj\Debug\ZAD_1.csproj.CoreCompileInputs.cache
+C:\Users\filip\Desktop\Zadatak_1-master\ZAD_1\ZAD_1\obj\Debug\ZAD_1.exe
+C:\Users\filip\Desktop\Zadatak_1-master\ZAD_1\ZAD_1\obj\Debug\ZAD_1.pdb
