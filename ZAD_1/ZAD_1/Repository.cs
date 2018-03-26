@@ -41,44 +41,28 @@ namespace ZAD_1
 
         #region Studenti
 
+        //Dohvaćanje liste studenata
         public static Dictionary<string, Student> GetStudenti()
         {
             foreach (var student in studenti.Values)
             {
                 Console.WriteLine(student.ToString());
             }
+            return studenti;
+        }
 
-            return null;
-        }        
-
+        //Dohvaćanje studenta po predanom broju indeksa
         public static Student GetStudent(string brojIndeksa)
         {
-            //pokrenuta metoda trazenja, pripremljen container za eventualno nadjenog studenta
-            Student matchStudent = new Student();
-            matchStudent.BrojIndeksa = brojIndeksa;
-
-            //kroz kolekciju studenata trazimo
-            foreach (var student in studenti)
+            if (studenti.ContainsKey(brojIndeksa))
             {
-                //Definiramo keyeve i value vrijednosti za studenta
-                var studentKey = student.Key;
-                var studentValue = student.Value;
-
-                if (studentKey == matchStudent.BrojIndeksa)
-                {
-                    matchStudent.BrojIndeksa = studentKey;
-                    matchStudent.Ime = studentValue.Ime;
-                    matchStudent.Prezime = studentValue.Prezime;
-                    matchStudent.GodinaStudija = studentValue.GodinaStudija;
-
-                    return matchStudent;
-                    break;
-                }
+                return studenti[brojIndeksa];
             }
             //Metoda ima posao pretrazivanja i vraćanja objekta Student, ukoliko ga je pronasla vraća studenta
             return null;
         }
 
+        //Kreiranje novog studenta
         public static bool CreateNewStudent(Student student)
         {
             if (!studenti.ContainsKey(student.BrojIndeksa))
@@ -92,49 +76,22 @@ namespace ZAD_1
 
         public static bool UrediStudenta(Student student)
         {
-            //pokrenuta metoda trazenja, pripremljen container za eventualno nadjenog studenta
-            Student matchStudent = new Student();
-            matchStudent.BrojIndeksa = student.BrojIndeksa;
 
-            //kroz kolekciju studenata trazimo
-            foreach (var stud in studenti)
+            if (studenti.ContainsKey(student.BrojIndeksa))
             {
-                //Definiramo keyeve i value vrijednosti za studenta
-                var studentKey = stud.Key;
-
-                if (studentKey == matchStudent.BrojIndeksa)
-                {
-                    matchStudent.BrojIndeksa = student.BrojIndeksa;
-                    matchStudent.Ime = student.Ime;
-                    matchStudent.Prezime = student.Prezime;
-                    matchStudent.GodinaStudija = student.GodinaStudija;
-
-                    return true;
-                }
+                studenti[student.BrojIndeksa] = student;
             }
-
             return false;
         }
 
         public static bool RemoveStudent(Student student)
-        {
-            //Prolazimo kroz listu studenata u bazi
-            foreach (var stud in studenti)
-            {
-                //Ako u bazi postoji student koji ima broj indeksa jednak prednom broju indeksa
-                // Izbrisi tog studenta iz baze, i metoda vrati TRUE
-
-                //OVO ZNACI TREBA PREPRAVIT DA RADI NA POSLANI BROJ INDEKSA; NE NA CIJELI STUDENT
-                // okej, a kako ja to vidim tek kad ti krenes, kad sam sam isao kroz metodu ne skuzim jebenttittttttt
-                //nemoj mislit na sise i guzice
-                //pardon, igrice
-                //if (stud.BrojIndeksa.Equals(student.BrojIndeksa))
-                //{
-                //    studenti.Remove(student);
-                //    return true;
-                //}
-            }
-            //Ukoliko ne postoji student vrati FALSE
+        {           
+                if (studenti.ContainsKey(student.BrojIndeksa))
+                {
+                    studenti.Remove(student.BrojIndeksa);
+                    return true;
+                }
+                        
             return false;
         }
 
@@ -241,6 +198,6 @@ namespace ZAD_1
         #endregion
 
 
-       
+
     }
 }

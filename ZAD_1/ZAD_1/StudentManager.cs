@@ -14,6 +14,7 @@ namespace ZAD_1
     {
         public static void Start()
         {
+            Console.WriteLine("\n");
             Console.WriteLine("a) Novi student");
             Console.WriteLine("b) Uredi studenta");
             Console.WriteLine("c) Obriši studenta");
@@ -155,6 +156,8 @@ namespace ZAD_1
                     Console.WriteLine("\nU bazi već postoji student sa unesenim brojem indeksa\n");
                     Console.ReadLine();
                 }
+
+
             }
             catch (Exception e)
             {
@@ -162,6 +165,7 @@ namespace ZAD_1
                 throw;
             }
 
+            //Pokretanje metode za ispis podataka o unesenom studentu
             Start();
         }
 
@@ -170,43 +174,43 @@ namespace ZAD_1
             Console.WriteLine("\n");
 
             //Ispis svih studanata u bazi
-            Repository.GetStudenti();
+            var studenti = Repository.GetStudenti();
 
             // Korisnički unos kojeg studenta se želi urediti
             Console.Write("\n\nUpišite broj indeksa studenta kojeg želite urediti (0 za odustajanje): ");
 
             //Korisnički unos
-            string brojIndeksa = Console.ReadLine();
+            string broj = Console.ReadLine();
+            string result = InputManager.CheckType(broj);
 
-            if (brojIndeksa == "0")
+            while (result == "String" || result == "Null")
             {
-                Console.WriteLine("\n\nOdustajanje");
+                Console.Write("Unos broja indeksa studenta nije u odgovarajućem formatu, pokušajte ponovno (0 za odustajanje): ");
+                broj = Console.ReadLine();
+                result = InputManager.CheckType(broj);
+            }
+
+            if (broj == "0")
+            {
+                Console.WriteLine("\n\nOdustajanje...\n\n");
                 Start();
             }
 
-            // Provjera da li je unesen broj indeksa
-            while (string.IsNullOrWhiteSpace(brojIndeksa))
-            {
-                Console.WriteLine("\nNeispravan unos, pokušajte ponovno\n");
-                //Vraćamo korisnika na ponovni unos za uredivanje studenta 
-                UrediStudenta();
-            }
-
             //Pretrazivanje liste studenata sa korisnickim unosom broja indeksa
-            Student student = Repository.GetStudent(brojIndeksa);
+            Student student = Repository.GetStudent(broj);
 
             //Provjera da li je vraćeno iz metode jednako null
             if (student == null)
             {
                 Console.WriteLine("\nNije pronađen niti jedan student sa traženim brojem indeksa!\n");
                 //vracamo se u glavni izbornik student managera
-                Start();
+                UrediStudenta();
             }
 
             //Student u bazi je pronađen, unosimo nove podatke o studentu koje zelimo mijenjati
             Console.WriteLine("\nUnesite novo ime studenta: ");
             string ime = Console.ReadLine();
-            string result = InputManager.CheckType(ime);
+            result = InputManager.CheckType(ime);
 
             while (result == "Int" || result == "Null")
             {
@@ -223,8 +227,9 @@ namespace ZAD_1
 
             student.Ime = ime;
 
+
             Console.WriteLine("Unesite prezime: ");
-            string prezime = Console.ReadLine();
+            var prezime = Console.ReadLine();
             result = InputManager.CheckType(prezime);
 
             while (result == "Int" || result == "Null")
@@ -244,36 +249,46 @@ namespace ZAD_1
 
 
             Console.WriteLine("Unesite godinu studija: ");
-            string godina = Console.ReadLine();
-            result = InputManager.CheckType(godina);
+            var godinaStudija = Console.ReadLine();
 
+            while (string.IsNullOrWhiteSpace(godinaStudija))
+            {
+                Console.WriteLine("\nNeispravan unos, pokušajte ponovno\n");
+                Console.WriteLine("\nUnesite novu godinu studija studenta: ");
+                godinaStudija = Console.ReadLine();
+            }
+
+            result = InputManager.CheckType(godinaStudija);
             while (result == "String" || result == "Null")
             {
                 Console.Write("Unos godine studija novog studenta nije u odgovarajućem formatu, pokušajte ponovno (0 za odustajanje): ");
-                godina = Console.ReadLine();
-                result = InputManager.CheckType(godina);
+                godinaStudija = Console.ReadLine();
+                result = InputManager.CheckType(godinaStudija);
             }
 
-            if (godina == "0")
+            if (godinaStudija == "0")
             {
                 Console.WriteLine("\n\nOdustajanje...\n\n");
                 Start();
             }
 
-            student.GodinaStudija = Convert.ToInt32(godina);
+            student.GodinaStudija = Convert.ToInt32(godinaStudija);
 
             //krecemo u azuriranje nasih pohranjenih podataka
-            bool isValid = Repository.UrediStudenta(student);
-            if (isValid)
+            bool isEdited = Repository.UrediStudenta(student);
+
+            if (isEdited)
             {
                 //Poruka o uspješnosti
-                Console.WriteLine("\nPodaci studenta uspješno uređeni, podaci o studentu sa brojem indeksa " + student.BrojIndeksa + ", su " + student.ToString());
+                Console.WriteLine("\nPodaci studenta uspješno uređeni, podaci o studentu su " + student.ToString());
             }
             else
             {
-                Console.WriteLine("Uređivanje studenta neuspješno, povratak na izbornik...");
-                Start();
-            }           
+                Console.WriteLine("Neuspješno uređivanje podataka o studentu");
+            }
+
+            //povratak na glavni izbornik
+            Start();
         }
 
         public static void IzbrisiStudenta()
@@ -281,46 +296,52 @@ namespace ZAD_1
             Console.WriteLine("\n");
 
             //Prikaz svih studenata
+            Console.WriteLine("Lista studenata iz baze: ");
             var studenti = Repository.GetStudenti();
-            Console.WriteLine("\n" + studenti + "\n");
+
             //Korisnicki unos
             Console.Write("\n\nUpišite broj indeksa studenta kojeg želite izbrisati: ");
 
             //Korisnicki odabir
-            string brojIndeksa = Console.ReadLine()?.ToLower();
+            string brojIndeksa = Console.ReadLine();
+            string result = InputManager.CheckType(brojIndeksa);
+            while (result == "String" || result == "Null")
+            {
+                Console.Write("Unos broja indeksa studenta nije u odgovarajućem formatu, pokušajte ponovno (0 za odustajanje): ");
+                brojIndeksa = Console.ReadLine();
+                result = InputManager.CheckType(brojIndeksa);
+            }
 
-            //Pretrazivanje baze da li postoji student sa predanim brojem indeksa
-
-            //objasni mi sljedecu logiku: korisniik unese identifier studenta kiojeg zeli brisati
-            //ti odes u bazu, pretrazis 10000 studenata ekonomije i dohvatis jednog
-            //tog istog studenta onda saljes na brisanje
-            //kaj tu ne valja?
-            // Dulpi odlazak u bazu, dva šamara (20 sklekova)-10 za tocan odgovoro barem
-            //radi bahatosti 30
-            //da si znal tocan odgovor ne bi napravil ovu glupost
-            //ISPRAVITI
-            Student student = Repository.GetStudent(brojIndeksa);
-
-            //Provjera da li je vraćeno iz metode jednako null
-            if (student == null)
+            if (brojIndeksa == "0")
+            {
+                Console.WriteLine("\n\nOdustajanje...\n\n");
+                Start();
+            }
+            if (!studenti.ContainsKey(brojIndeksa))
             {
                 Console.WriteLine("\nNije pronađen niti jedan student sa traženim brojem indeksa!\n");
                 //vracamo se u glavni izbornik student managera
                 Start();
             }
 
-            //Student je pronađen, redirect u repo na boolean metodu za brisanje studenta
-            Repository.RemoveStudent(student);
+            Student student = Repository.GetStudent(brojIndeksa);
 
-            if (Repository.RemoveStudent(student) == false)
+            bool isRemoved = Repository.RemoveStudent(student);
+            if (isRemoved)
             {
-                //Neuspjesnost
-                Console.WriteLine("U bazi nije pronađen student.");
+                //Uspješno
+                Console.WriteLine("\n\nUspješno je obrisan student iz baze sa podacima" + ", " + student.ToString() + "\n\n");
+                //Prikaz svih studenata
+                Console.WriteLine("Lista studenata iz baze: ");
+                studenti = Repository.GetStudenti();
+
                 Start();
             }
-
-            //Potvrda o uspjesnosti
-            Console.WriteLine("\n\nUspješno je obrisan student iz baze sa podacima" + ", " + student.ToString());
+            else
+            {
+                //Potvrda o neuspješnosti
+                Console.WriteLine("Neuspješno brisanje studenta iz baze");
+            }                      
 
             //Pokretanje izbornika za studente
             Start();
@@ -329,7 +350,6 @@ namespace ZAD_1
         public static void IzbrisiPopisStudenata()
         {
             Console.WriteLine("\n");
-
 
             if (Repository.ClearStudentsList())
             {
